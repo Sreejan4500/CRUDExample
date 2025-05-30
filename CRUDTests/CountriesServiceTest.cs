@@ -11,13 +11,9 @@ namespace CRUDTests
 {
     public class CountriesServiceTest
     {
-        private readonly ICountriesService _countriesService;
+        private readonly ICountriesService _countriesService = new CountriesService();
 
-        public CountriesServiceTest()
-        {
-            _countriesService = new CountriesService();
-        }
-
+        #region AddCountry Tests
         // When CountryAddRequest is null, it should throw ArgumentNullException
         [Fact]
         public void AddCountry_NullCountry()
@@ -87,9 +83,50 @@ namespace CRUDTests
 
             // Act
             CountryResponse response = _countriesService.AddCountry(request);
+            List<CountryResponse> countryResponses = _countriesService.GetAllCountries();
 
             // Assert
             Assert.True(response.CountryID != Guid.Empty);
+            Assert.Contains(response, countryResponses);         
         }
+        #endregion
+
+        #region GetAllCountries Tests
+
+        // When you call GetAllCountries, it should return an empty list of countries (before adding any countries).
+        [Fact]
+        public void GetAllCountries_EmptyListBeforeAddingCountries()
+        {
+            // Act
+            List<CountryResponse> response = _countriesService.GetAllCountries();
+
+            // Assert
+            Assert.Empty(response);
+        }
+
+        // When you call GetAllCountries, it should return a list of countries (after adding some countries).
+        [Fact]
+        public void GetAllCountries_ListOfCountriesAfterAddingCountries()
+        {
+            // Arrange
+            CountryAddRequest? request1 = new()
+            {
+                CountryName = "India"
+            };
+            CountryAddRequest? request2 = new()
+            {
+                CountryName = "USA"
+            };
+
+            // Act
+            _countriesService.AddCountry(request1);
+            _countriesService.AddCountry(request2);
+            List<CountryResponse> response = _countriesService.GetAllCountries();
+            
+            // Assert
+            Assert.Equal(2, response.Count);
+        }
+
+        #endregion
     }
 }
