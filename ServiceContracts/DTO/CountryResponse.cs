@@ -1,9 +1,4 @@
 ﻿using Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ServiceContracts.DTO
 {
@@ -14,6 +9,32 @@ namespace ServiceContracts.DTO
     {
         public Guid CountryID { get; set; }
         public string? CountryName { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public override bool Equals(object? obj)
+        {
+            if(obj is null)
+            {
+                return false;
+            }
+            if(obj is not CountryResponse)
+            {
+                return false;
+            }
+
+            CountryResponse countryResponse = (CountryResponse)obj;
+            return CountryID == countryResponse.CountryID &&
+                   CountryName == countryResponse.CountryName;
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
     }
 
     public static class CountryExtensions
