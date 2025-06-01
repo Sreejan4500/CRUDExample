@@ -43,9 +43,33 @@ namespace Services
             return _countries.Select(country => country.ToCountryResponse()).ToList();
         }
 
+        /// <summary>
+        /// Retrieves a country by its unique identifier.
+        /// </summary>
+        /// <remarks>This method searches for a country in the internal collection based on the provided
+        /// <paramref name="countryID"/>. If a match is found, the country is converted to a <see
+        /// cref="CountryResponse"/> object and returned.</remarks>
+        /// <param name="countryID">The unique identifier of the country to retrieve. Must be a non-null and non-empty <see cref="Guid"/>.</param>
+        /// <returns>A <see cref="CountryResponse"/> object representing the country with the specified identifier,  or <see
+        /// langword="null"/> if no matching country is found or if <paramref name="countryID"/> is null or empty.</returns>
         public CountryResponse? GetCountryByCountryID(Guid? countryID)
         {
-            throw new NotImplementedException();
+            // Checks if "countryID" is null or empty
+            // If so, throws an ArgumentNullException with a message indicating that the countryID cannot be null.
+            // Otherwise, searches for the country with the specified ID.
+            // Get matching country from List<Country> based on the provided countryID
+            // If no match is found, returns null.
+            // Converts the matching "Country" object to a "CountryResponse" object and returns it.
+            if (countryID == null || countryID == Guid.Empty)
+            {
+                throw new ArgumentNullException(nameof(countryID), "CountryID cannot be null.");
+            }
+            Country? country = _countries.FirstOrDefault(c => c.CountryID == countryID.Value);
+            if (country == null)
+            {
+                return null;
+            }
+            return country.ToCountryResponse();
         }
     }
 }

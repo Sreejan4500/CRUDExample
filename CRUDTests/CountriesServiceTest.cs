@@ -126,14 +126,20 @@ namespace CRUDTests
 
         #region GetCountryByCountryID Tests
 
-        // When you call GetCountryByCountryID with a null
+        /// <summary>
+        /// Validates that the <see cref="_countriesService.GetCountryByCountryID(Guid?)"/> method  throws an <see
+        /// cref="ArgumentNullException"/> when the <paramref name="countryID"/> parameter is null.
+        /// </summary>
+        /// <remarks>This test ensures that the method correctly handles null input for the <paramref
+        /// name="countryID"/> parameter  by throwing the expected exception, adhering to the method's precondition
+        /// requirements.</remarks>
         [Fact]
         public void GetCountryByCountryID_NullCountryID()
         {
             // Arrange
             Guid? countryID = null;
             // Assert
-            Assert.Throws<NotImplementedException>(() =>
+            Assert.Throws<ArgumentNullException>(() =>
             {
                 // Act
                 _countriesService.GetCountryByCountryID(countryID);
@@ -164,6 +170,22 @@ namespace CRUDTests
             Assert.Equal(response.CountryName, countryResponse.CountryName);
         }
 
+        /// <summary>
+        /// Tests the behavior of the <see cref="_countriesService.GetCountryByCountryID(Guid?)"/> method  when an invalid or
+        /// non-existent country ID is provided.
+        /// </summary>
+        /// <remarks>This test verifies that the method returns <see langword="null"/> when the specified  <paramref
+        /// name="countryID"/> does not correspond to any existing country.</remarks>
+        [Fact]
+        public void GetCountryByCountryID_InvalidCountryID()
+        {
+            // Arrange
+            Guid? countryID = Guid.NewGuid(); // A random GUID that does not exist in the list
+            // Act
+            CountryResponse? countryResponse = _countriesService.GetCountryByCountryID(countryID);
+            // Assert
+            Assert.Null(countryResponse); // Should return null since no country with this ID exists
+        }
         #endregion
     }
 }
