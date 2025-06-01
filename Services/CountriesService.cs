@@ -10,6 +10,18 @@ namespace Services
     {
         private readonly List<Country> _countries = new List<Country>();
 
+        /// <summary>
+        /// Adds a new country to the collection.
+        /// </summary>
+        /// <remarks>This method generates a unique identifier for the new country and ensures that
+        /// duplicate country names are not allowed.</remarks>
+        /// <param name="countryAddRequest">The request object containing the details of the country to be added.  The <see
+        /// cref="CountryAddRequest.CountryName"/> property must not be null or empty.</param>
+        /// <returns>A <see cref="CountryResponse"/> object representing the added country, including its generated unique
+        /// identifier.</returns>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="countryAddRequest"/> is null.</exception>
+        /// <exception cref="ArgumentException">Thrown if <see cref="CountryAddRequest.CountryName"/> is null, empty, or consists only of whitespace. Thrown
+        /// if a country with the same name already exists in the collection.</exception>
         public CountryResponse AddCountry(CountryAddRequest? countryAddRequest)
         {
             // Validate the input request: countryAddRequest should not be null
@@ -38,10 +50,19 @@ namespace Services
             return country.ToCountryResponse(); 
         }
 
+        /// <summary>
+        /// Retrieves a list of all countries.
+        /// </summary>
+        /// <remarks>This method converts internal country data into <see cref="CountryResponse"/> objects
+        /// and returns them as a collection. The returned list is a snapshot of the current state and does not reflect
+        /// subsequent changes to the underlying data.</remarks>
+        /// <returns>A list of <see cref="CountryResponse"/> objects representing all countries. The list will be empty if no
+        /// countries are available.</returns>
         public List<CountryResponse> GetAllCountries()
         {
             return _countries.Select(country => country.ToCountryResponse()).ToList();
         }
+
 
         /// <summary>
         /// Retrieves a country by its unique identifier.

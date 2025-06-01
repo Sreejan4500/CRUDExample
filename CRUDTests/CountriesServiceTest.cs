@@ -9,7 +9,13 @@ namespace CRUDTests
         private readonly ICountriesService _countriesService = new CountriesService();
 
         #region AddCountry Tests
-        // When CountryAddRequest is null, it should throw ArgumentNullException
+
+        /// <summary>
+        /// Tests the <see cref="ICountriesService.AddCountry"/> method to ensure it throws an  <see
+        /// cref="ArgumentNullException"/> when the <paramref name="request"/> parameter is null.
+        /// </summary>
+        /// <remarks>This test verifies that the <see cref="ICountriesService.AddCountry"/> method
+        /// enforces  proper argument validation by throwing an exception when a null request is provided.</remarks>
         [Fact]
         public void AddCountry_NullCountry()
         {
@@ -24,7 +30,13 @@ namespace CRUDTests
             });
         }
 
-        // When CountryName is null, it should throw ArgumentException
+        /// <summary>
+        /// Tests that the <see cref="_countriesService.AddCountry"/> method throws an <see cref="ArgumentException"/> 
+        /// when the <see cref="CountryAddRequest.CountryName"/> property is <see langword="null"/>.
+        /// </summary>
+        /// <remarks>This test ensures that the <see cref="_countriesService.AddCountry"/> method
+        /// correctly validates  the <see cref="CountryAddRequest.CountryName"/> property and throws an appropriate
+        /// exception  when the property is not set.</remarks>
         [Fact]
         public void AddCountry_NullCountryName()
         {
@@ -42,7 +54,12 @@ namespace CRUDTests
             });
         }
 
-        // When CountryName is duplicate, it should throw ArgumentException
+        /// <summary>
+        /// Tests the behavior of the <see cref="_countriesService.AddCountry"/> method when attempting to add  a
+        /// country with a duplicate name.
+        /// </summary>
+        /// <remarks>This test verifies that the <see cref="_countriesService.AddCountry"/> method throws
+        /// an  <see cref="ArgumentException"/> when a country with the same name is added more than once.</remarks>
         [Fact]
         public void AddCountry_DuplicateCountryName()
         {
@@ -66,7 +83,12 @@ namespace CRUDTests
             });
         }
 
-        // When you supply proper CountryName, it should insert into the list of countries.
+        /// <summary>
+        /// Tests the addition of a country with valid details and verifies that the country is successfully added.
+        /// </summary>
+        /// <remarks>This test ensures that the <see cref="_countriesService.AddCountry"/> method
+        /// correctly adds a country when provided with valid input and that the added country is retrievable using <see
+        /// cref="_countriesService.GetAllCountries"/>.</remarks>
         [Fact]
         public void AddCountry_ProperCountryDetails()
         {
@@ -88,7 +110,13 @@ namespace CRUDTests
 
         #region GetAllCountries Tests
 
-        // When you call GetAllCountries, it should return an empty list of countries (before adding any countries).
+        /// <summary>
+        /// Tests that the <see cref="_countriesService.GetAllCountries"/> method returns an empty list when no
+        /// countries have been added.
+        /// </summary>
+        /// <remarks>This test verifies the initial state of the <see cref="_countriesService"/> service,
+        /// ensuring that calling <see cref="_countriesService.GetAllCountries"/> before adding any countries results in
+        /// an empty list.</remarks>
         [Fact]
         public void GetAllCountries_EmptyListBeforeAddingCountries()
         {
@@ -99,7 +127,14 @@ namespace CRUDTests
             Assert.Empty(response);
         }
 
-        // When you call GetAllCountries, it should return a list of countries (after adding some countries).
+        /// <summary>
+        /// Tests that the <see cref="_countriesService.GetAllCountries"/> method returns a list of countries  after
+        /// adding multiple countries using the <see cref="_countriesService.AddCountry"/> method.
+        /// </summary>
+        /// <remarks>This test verifies that the <see cref="_countriesService.GetAllCountries"/> method
+        /// correctly retrieves  all countries that were previously added via the <see
+        /// cref="_countriesService.AddCountry"/> method.  It ensures that the count of returned countries matches the
+        /// number of countries added.</remarks>
         [Fact]
         public void GetAllCountries_ListOfCountriesAfterAddingCountries()
         {
