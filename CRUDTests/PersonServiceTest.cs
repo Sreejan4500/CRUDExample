@@ -8,6 +8,7 @@ namespace CRUDTests
     public class PersonServiceTest
     {
         private readonly IPersonService _personService = new PersonService();
+        private readonly ICountryService _countryService = new CountryService();
 
         #region AddPerson Tests
 
@@ -87,6 +88,68 @@ namespace CRUDTests
 
         #region GetAllPersons Tests
 
+        [Fact]
+        public void GetAllPersons_EmptyListBeforeAddingPersons()
+        {
+            // Act
+            List<PersonResponse> persons = new List<PersonResponse>();
+
+            // Assert
+            Assert.Empty(persons);
+        }
+
+        [Fact]
+        public void GetAllPersons_ListOfPersonsAfterAddingPersons()
+        {
+            // Arrange
+            CountryAddRequest country1 = new CountryAddRequest { CountryName = "India" };
+            CountryAddRequest country2 = new CountryAddRequest { CountryName = "USA" };
+
+            CountryResponse countryResponse1 = _countryService.AddCountry(country1);
+            CountryResponse countryResponse2 = _countryService.AddCountry(country2);
+
+            PersonAddRequest person1 = new PersonAddRequest
+            {
+                PersonName = "Mary",
+                Email = "mary@yahoo.com",
+                CountryID = countryResponse1.CountryID
+            };
+            PersonAddRequest person2 = new PersonAddRequest
+            {
+                PersonName = "Juleus",
+                Email = "juleus@yahoo.com",
+                CountryID = countryResponse1.CountryID
+            };
+            PersonAddRequest person3 = new PersonAddRequest
+            {
+                PersonName = "August",
+                Email = "august@yahoo.com",
+                CountryID = countryResponse1.CountryID
+            };
+
+            List<PersonAddRequest> personAddRequests = new List<PersonAddRequest>()
+            {
+                person1,
+                person2,
+                person3
+            };
+
+            List<PersonResponse> personResponses = new List<PersonResponse>();
+
+            foreach (PersonAddRequest personAddRequest in personAddRequests)
+            {
+                PersonResponse personResponse = _personService.AddPerson(personAddRequest);
+            }
+
+            // Act
+            _personService.GetAllPersons();
+
+            // Assert
+            foreach (PersonResponse personResponse in personResponses)
+            {
+                Assert.Contains(personResponse, _personService.GetAllPersons());
+            }
+        }
 
 
         #endregion
