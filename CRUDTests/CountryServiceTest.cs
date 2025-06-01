@@ -4,17 +4,17 @@ using Services;
 
 namespace CRUDTests
 {
-    public class CountriesServiceTest
+    public class CountryServiceTest
     {
-        private readonly ICountriesService _countriesService = new CountriesService();
+        private readonly ICountryService _countriesService = new CountryService();
 
         #region AddCountry Tests
 
         /// <summary>
-        /// Tests the <see cref="ICountriesService.AddCountry"/> method to ensure it throws an  <see
+        /// Tests the <see cref="ICountryService.AddCountry"/> method to ensure it throws an  <see
         /// cref="ArgumentNullException"/> when the <paramref name="request"/> parameter is null.
         /// </summary>
-        /// <remarks>This test verifies that the <see cref="ICountriesService.AddCountry"/> method
+        /// <remarks>This test verifies that the <see cref="ICountryService.AddCountry"/> method
         /// enforces  proper argument validation by throwing an exception when a null request is provided.</remarks>
         [Fact]
         public void AddCountry_NullCountry()

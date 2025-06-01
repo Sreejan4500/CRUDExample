@@ -5,7 +5,7 @@ namespace ServiceContracts
     /// <summary>
     /// Represents business logic for manipulating Country entity.
     /// </summary>
-    public interface ICountriesService
+    public interface ICountryService
     {
         /// <summary>
         /// Adds a country object tot the list of countries.

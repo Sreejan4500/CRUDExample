@@ -6,7 +6,7 @@ using ServiceContracts.DTO;
 
 namespace Services
 {
-    public class CountriesService : ICountriesService
+    public class CountryService : ICountryService
     {
         private readonly List<Country> _countries = new List<Country>();
 
