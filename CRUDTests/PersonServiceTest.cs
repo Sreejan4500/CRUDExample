@@ -65,8 +65,8 @@ namespace CRUDTests
         public void AddPerson_DuplicateEmail()
         {
             // Arrange
-            PersonAddRequest personAddRequest1 = new PersonAddRequest { PersonName = "Jane", Email = "jane@gmail.com" };
-            PersonAddRequest personAddRequest2 = new PersonAddRequest { PersonName = "Jane", Email = "jane@gmail.com" };
+            PersonAddRequest personAddRequest1 = new PersonAddRequest { PersonName = "Jane", CountryID = Guid.NewGuid(), Email = "jane@gmail.com" };
+            PersonAddRequest personAddRequest2 = new PersonAddRequest { PersonName = "Jane", CountryID = Guid.NewGuid(), Email = "jane@gmail.com" };
 
             _personService.AddPerson(personAddRequest1);
 

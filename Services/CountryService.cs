@@ -84,7 +84,7 @@ namespace Services
             // Converts the matching "Country" object to a "CountryResponse" object and returns it.
             if (countryID == null || countryID == Guid.Empty)
             {
-                return null;
+                throw new ArgumentNullException("CountryID can't be null or empty.");
             }
             Country? country = _countries.FirstOrDefault(c => c.CountryID == countryID.Value);
             if (country == null)

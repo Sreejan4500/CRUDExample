@@ -1,7 +1,7 @@
 ﻿using Entities;
 using ServiceContracts;
 using ServiceContracts.DTO;
-using System.Net.Mail;
+using Services.Helpers;
 
 namespace Services
 {
@@ -30,32 +30,18 @@ namespace Services
                 throw new ArgumentNullException(nameof(personAddRequest));
             }
 
-            #region Properties Validation
+            #region Property Validations
 
-            if (string.IsNullOrEmpty(personAddRequest.PersonName))
-            {
-                throw new ArgumentException(nameof(personAddRequest.PersonName), "Person Name can't be blank.");
-            }
-            if (personAddRequest.Email != null)
-            {
-                try
-                {
-                    MailAddress email = new MailAddress(personAddRequest.Email);
-                }
-                catch (FormatException)
-                {
-                    throw new ArgumentException(nameof(personAddRequest.Email), "Email is not in a valid format.");
-                }
-            }
-            
-            if (_persons.Any(p => 
-            !string.IsNullOrEmpty(p.Email) &&
-            p.Email == personAddRequest.Email))                
+            ValidationHelper.ModelValidation(personAddRequest);
+
+            if (_persons.Any(p =>
+                !string.IsNullOrEmpty(p.Email) &&
+                p.Email == personAddRequest.Email))
             {
                 throw new ArgumentException(nameof(personAddRequest.Email), "Email already exists.");
             }
 
-            if(personAddRequest.DateOfBirth.HasValue && (personAddRequest.DateOfBirth.Value > DateTime.Now || personAddRequest.DateOfBirth.Value <= DateTime.Now.AddYears(-17)))
+            if (personAddRequest.DateOfBirth.HasValue && (personAddRequest.DateOfBirth.Value > DateTime.Now || personAddRequest.DateOfBirth.Value >= DateTime.Now.AddYears(-17)))
             {
                 throw new ArgumentException(nameof(personAddRequest.DateOfBirth), "Date of Birth must be at least 18 years old and cannot be in the future.");
             }
@@ -66,7 +52,7 @@ namespace Services
             person.PersonID = Guid.NewGuid();
 
             _persons.Add(person);
-            
+
             return ConvertPersonToPersonResponse(person);
         }
 
