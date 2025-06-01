@@ -10,6 +10,7 @@ namespace Services
     {
         private readonly List<Country> _countries = new List<Country>();
 
+
         /// <summary>
         /// Adds a new country to the collection.
         /// </summary>
