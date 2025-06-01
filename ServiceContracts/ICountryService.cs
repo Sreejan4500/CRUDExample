@@ -8,7 +8,7 @@ namespace ServiceContracts
     public interface ICountryService
     {
         /// <summary>
-        /// Adds a country object tot the list of countries.
+        /// Adds a country object to the list of countries.
         /// </summary>
         /// <param name="countryAddRequest">Country object to add.</param>
         /// <returns>Returns the country object after adding it (including the newly generated country id).</returns>
