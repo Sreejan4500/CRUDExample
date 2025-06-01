@@ -1,16 +1,13 @@
 ﻿using ServiceContracts;
 using ServiceContracts.DTO;
 using ServiceContracts.Enums;
+using Services;
 
 namespace CRUDTests
 {
     public class PersonServiceTest
     {
-        private readonly IPersonService _personService;
-        public PersonServiceTest(IPersonService personService)
-        {
-            _personService = personService;
-        }
+        private readonly IPersonService _personService = new PersonService();
 
         #region AddPerson Tests
 
@@ -68,8 +65,8 @@ namespace CRUDTests
         public void AddPerson_DuplicateEmail()
         {
             // Arrange
-            PersonAddRequest personAddRequest1 = new PersonAddRequest { Email = "jane@gmail.com" };
-            PersonAddRequest personAddRequest2 = new PersonAddRequest { Email = "jane@gmail.com" };
+            PersonAddRequest personAddRequest1 = new PersonAddRequest { PersonName = "Jane", Email = "jane@gmail.com" };
+            PersonAddRequest personAddRequest2 = new PersonAddRequest { PersonName = "Jane", Email = "jane@gmail.com" };
 
             _personService.AddPerson(personAddRequest1);
 
@@ -81,7 +78,7 @@ namespace CRUDTests
         public void AddPerson_MinimumAgeRequirement()
         {
             // Arrange
-            PersonAddRequest personAddRequest = new PersonAddRequest { DateOfBirth = DateTime.Now.AddYears(-17), }; // Less than 18 years old
+            PersonAddRequest personAddRequest = new PersonAddRequest { PersonName = "Jane", DateOfBirth = DateTime.Now.AddYears(-17), }; // Less than 18 years old
             // Act & Assert
             Assert.Throws<ArgumentException>(() => _personService.AddPerson(personAddRequest));
         }

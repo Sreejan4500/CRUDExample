@@ -41,9 +41,9 @@ namespace ServiceContracts.DTO
 
     public static class PersonResponseExtensions
     {
-        public static PersonResponse ToPerson(this Person person)
+        public static PersonResponse ToPersonResponse(this Person person)
         {
-            return new PersonResponse
+            return new PersonResponse()
             {
                 PersonID = person.PersonID,
                 PersonName = person.PersonName,
