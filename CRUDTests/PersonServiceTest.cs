@@ -110,7 +110,7 @@ namespace CRUDTests
             { 
                 PersonName = "John Doe", 
                 Email = "john@gmail.com", 
-                CountryID = new Guid(), 
+                CountryID = Guid.NewGuid(), 
                 DateOfBirth = new DateTime(2000, 5, 4) 
             };
 
@@ -124,6 +124,16 @@ namespace CRUDTests
 
         }
 
+        [Fact]
+        public void GetPersonByPersonID_InvalidPersonID()
+        {
+            // Arrange
+            Guid personID = Guid.NewGuid(); // Assuming this ID does not exist
+            // Act
+            PersonResponse? personResponse = _personService.GetPersonByPersonID(personID);
+            // Assert
+            Assert.Null(personResponse);
+        }
         #endregion
 
     }

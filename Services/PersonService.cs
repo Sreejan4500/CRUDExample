@@ -63,7 +63,22 @@ namespace Services
 
         public PersonResponse? GetPersonByPersonID(Guid? personID)
         {
-            throw new NotImplementedException();
+            // Check if personID is not null.
+            // Find the person with the given personID in List<Person>.
+            // If found, convert it to PersonResponse and return it.
+            if (personID == null)
+            {
+                throw new ArgumentNullException(nameof(personID), "Person ID cannot be null.");
+            }
+
+            Person? person = _persons.FirstOrDefault(p => p.PersonID == personID.Value);
+
+            if (person == null)
+            {
+                return null;
+            }
+
+            return ConvertPersonToPersonResponse(person);
         }
     }
 }
