@@ -2,6 +2,7 @@
 using ServiceContracts.DTO;
 using ServiceContracts.Enums;
 using Services;
+using Xunit.Abstractions;
 
 namespace CRUDTests
 {
@@ -9,6 +10,12 @@ namespace CRUDTests
     {
         private readonly IPersonService _personService = new PersonService();
         private readonly ICountryService _countryService = new CountryService();
+        private readonly ITestOutputHelper _outputHelper;
+
+        public PersonServiceTest(ITestOutputHelper outputHelper)
+        {
+            _outputHelper = outputHelper;
+        }
 
         #region AddPerson Tests
 
@@ -134,20 +141,35 @@ namespace CRUDTests
                 person3
             };
 
-            List<PersonResponse> personResponses = new List<PersonResponse>();
+            List<PersonResponse> personResponses_from_add = new List<PersonResponse>();
 
             foreach (PersonAddRequest personAddRequest in personAddRequests)
             {
                 PersonResponse personResponse = _personService.AddPerson(personAddRequest);
+                personResponses_from_add.Add(personResponse);
             }
 
             // Act
-            _personService.GetAllPersons();
+            List<PersonResponse> personResponses_from_get = _personService.GetAllPersons();
+
+            // Print the output for debugging
+
+            _outputHelper.WriteLine($"Expected:\nTotal Persons: {personResponses_from_add.Count}");
+            foreach(PersonResponse personResponse_from_add in personResponses_from_add)
+            {
+                _outputHelper.WriteLine($"PersonID: {personResponse_from_add.PersonID}, Name: {personResponse_from_add.PersonName}, Email: {personResponse_from_add.Email}");
+            }
+
+            _outputHelper.WriteLine($"Actual:\nTotal Persons: {personResponses_from_get.Count}");
+            foreach (PersonResponse personResponse_from_get in personResponses_from_get)
+            {
+                _outputHelper.WriteLine($"PersonID: {personResponse_from_get.PersonID}, Name: {personResponse_from_get.PersonName}, Email: {personResponse_from_get.Email}");
+            }
 
             // Assert
-            foreach (PersonResponse personResponse in personResponses)
+            foreach (PersonResponse personResponse in personResponses_from_add)
             {
-                Assert.Contains(personResponse, _personService.GetAllPersons());
+                Assert.Contains(personResponse, personResponses_from_get);
             }
         }
 
