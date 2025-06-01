@@ -1,11 +1,6 @@
 ﻿using ServiceContracts;
 using ServiceContracts.DTO;
 using Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CRUDTests
 {
@@ -22,7 +17,7 @@ namespace CRUDTests
             CountryAddRequest? request = null;
 
             // Assert
-            Assert.Throws<ArgumentNullException>(() => 
+            Assert.Throws<ArgumentNullException>(() =>
             {
                 // Act
                 _countriesService.AddCountry(request);
@@ -52,7 +47,7 @@ namespace CRUDTests
         public void AddCountry_DuplicateCountryName()
         {
             // Arrange
-            CountryAddRequest? request1 = new ()
+            CountryAddRequest? request1 = new()
             {
                 CountryName = "India"
             };
@@ -87,7 +82,7 @@ namespace CRUDTests
 
             // Assert
             Assert.True(response.CountryID != Guid.Empty);
-            Assert.Contains(response, countryResponses);         
+            Assert.Contains(response, countryResponses);
         }
         #endregion
 
@@ -122,9 +117,51 @@ namespace CRUDTests
             _countriesService.AddCountry(request1);
             _countriesService.AddCountry(request2);
             List<CountryResponse> response = _countriesService.GetAllCountries();
-            
+
             // Assert
             Assert.Equal(2, response.Count);
+        }
+
+        #endregion
+
+        #region GetCountryByCountryID Tests
+
+        // When you call GetCountryByCountryID with a null
+        [Fact]
+        public void GetCountryByCountryID_NullCountryID()
+        {
+            // Arrange
+            Guid? countryID = null;
+            // Assert
+            Assert.Throws<NotImplementedException>(() =>
+            {
+                // Act
+                _countriesService.GetCountryByCountryID(countryID);
+            });
+        }
+
+        /// <summary>
+        /// Tests the <see cref="_countriesService.GetCountryByCountryID"/> method to ensure it returns the correct 
+        /// <see cref="CountryResponse"/> object when provided with a valid country ID.When you call GetCountryByCountryID with a valid country ID, it should return the corresponding country object.
+        /// </summary>
+        /// <remarks>This test verifies that the method retrieves the expected country details when a
+        /// valid country ID is supplied. It ensures that the returned <see cref="CountryResponse"/> object is not null
+        /// and that its properties match  the values of the country added earlier.</remarks>
+        [Fact]
+        public void GetCountryByCountryID_ValidCountryID()
+        {
+            // Arrange
+            CountryAddRequest? request = new()
+            {
+                CountryName = "Germany"
+            };
+            CountryResponse response = _countriesService.AddCountry(request);
+            Guid? countryID = response.CountryID;
+            // Act
+            CountryResponse? countryResponse = _countriesService.GetCountryByCountryID(countryID);
+            // Assert
+            Assert.NotNull(countryResponse);
+            Assert.Equal(response.CountryName, countryResponse.CountryName);
         }
 
         #endregion
