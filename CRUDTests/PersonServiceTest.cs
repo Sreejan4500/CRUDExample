@@ -92,7 +92,7 @@ namespace CRUDTests
         public void GetAllPersons_EmptyListBeforeAddingPersons()
         {
             // Act
-            List<PersonResponse> persons = new List<PersonResponse>();
+            List<PersonResponse> persons = _personService.GetAllPersons();
 
             // Assert
             Assert.Empty(persons);
