@@ -81,5 +81,10 @@ namespace Services
 
             return ConvertPersonToPersonResponse(person);
         }
+
+        public List<PersonResponse> GetFilteredPerons(string searchBy, string? searchString)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

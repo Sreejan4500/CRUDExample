@@ -1,4 +1,5 @@
-﻿using ServiceContracts;
+﻿using Entities;
+using ServiceContracts;
 using ServiceContracts.DTO;
 using ServiceContracts.Enums;
 using Services;
@@ -108,51 +109,14 @@ namespace CRUDTests
         [Fact]
         public void GetAllPersons_ListOfPersonsAfterAddingPersons()
         {
-            // Arrange
-            CountryAddRequest country1 = new CountryAddRequest { CountryName = "India" };
-            CountryAddRequest country2 = new CountryAddRequest { CountryName = "USA" };
+            // Arrange            
+            List<PersonResponse> personResponses_from_add = PersonServiceTestHelper.AddPersonsToService(_countryService, _personService);
 
-            CountryResponse countryResponse1 = _countryService.AddCountry(country1);
-            CountryResponse countryResponse2 = _countryService.AddCountry(country2);
-
-            PersonAddRequest person1 = new PersonAddRequest
-            {
-                PersonName = "Mary",
-                Email = "mary@yahoo.com",
-                CountryID = countryResponse1.CountryID
-            };
-            PersonAddRequest person2 = new PersonAddRequest
-            {
-                PersonName = "Juleus",
-                Email = "juleus@yahoo.com",
-                CountryID = countryResponse1.CountryID
-            };
-            PersonAddRequest person3 = new PersonAddRequest
-            {
-                PersonName = "August",
-                Email = "august@yahoo.com",
-                CountryID = countryResponse1.CountryID
-            };
-
-            List<PersonAddRequest> personAddRequests = new List<PersonAddRequest>()
-            {
-                person1,
-                person2,
-                person3
-            };
-
-            List<PersonResponse> personResponses_from_add = new List<PersonResponse>();
-
-            foreach (PersonAddRequest personAddRequest in personAddRequests)
-            {
-                PersonResponse personResponse = _personService.AddPerson(personAddRequest);
-                personResponses_from_add.Add(personResponse);
-            }
 
             // Act
             List<PersonResponse> personResponses_from_get = _personService.GetAllPersons();
 
-            // Print the output for debugging
+            #region Print the output for debugging
 
             _outputHelper.WriteLine($"Expected:\nTotal Persons: {personResponses_from_add.Count}");
             foreach(PersonResponse personResponse_from_add in personResponses_from_add)
@@ -165,6 +129,8 @@ namespace CRUDTests
             {
                 _outputHelper.WriteLine($"PersonID: {personResponse_from_get.PersonID}, Name: {personResponse_from_get.PersonName}, Email: {personResponse_from_get.Email}");
             }
+
+            #endregion
 
             // Assert
             foreach (PersonResponse personResponse in personResponses_from_add)
@@ -220,5 +186,125 @@ namespace CRUDTests
         }
         #endregion
 
+
+        #region GetFilteredPersons Tests
+
+        [Fact]
+        public void GetFilteredPersons_EmptySearchText()
+        {
+            // Arrange
+            List<PersonResponse> personResponses_from_add = PersonServiceTestHelper.AddPersonsToService(_countryService, _personService);   
+
+            // Act
+            List<PersonResponse> personResponses_from_search = _personService.GetFilteredPerons(nameof(Person.PersonName), "");
+
+            #region Print the output for debugging
+
+            _outputHelper.WriteLine($"Expected:\nTotal Persons: {personResponses_from_add.Count}");
+            foreach (PersonResponse personResponse_from_add in personResponses_from_add)
+            {
+                _outputHelper.WriteLine($"PersonID: {personResponse_from_add.PersonID}, Name: {personResponse_from_add.PersonName}, Email: {personResponse_from_add.Email}");
+            }
+
+            _outputHelper.WriteLine($"Actual:\nTotal Persons: {personResponses_from_search.Count}");
+            foreach (PersonResponse personResponse_from_search in personResponses_from_search)
+            {
+                _outputHelper.WriteLine($"PersonID: {personResponse_from_search.PersonID}, Name: {personResponse_from_search.PersonName}, Email: {personResponse_from_search.Email}");
+            }
+
+            #endregion
+
+            // Assert
+            foreach (PersonResponse personResponse in personResponses_from_add)
+            {
+                Assert.Contains(personResponse, personResponses_from_search);
+            }
+        }
+
+        [Fact]
+        public void GetFilteredPersons_SearchByPersonName()
+        {
+            // Arrange            
+            List<PersonResponse> personResponses_from_add = PersonServiceTestHelper.AddPersonsToService(_countryService, _personService);
+
+            // Act
+            List<PersonResponse> personResponses_from_search = _personService.GetFilteredPerons(nameof(Person.PersonName), "ma");
+
+            #region Print the output for debugging
+
+            _outputHelper.WriteLine($"Expected:\nTotal Persons: {personResponses_from_add.Count}");
+            foreach (PersonResponse personResponse_from_add in personResponses_from_add)
+            {
+                if (personResponse_from_add.PersonName != null && personResponse_from_add.PersonName.Contains("ma", StringComparison.OrdinalIgnoreCase))
+                    _outputHelper.WriteLine($"PersonID: {personResponse_from_add.PersonID}, Name: {personResponse_from_add.PersonName}, Email: {personResponse_from_add.Email}");
+            }
+
+            _outputHelper.WriteLine($"Actual:\nTotal Persons: {personResponses_from_search.Count}");
+            foreach (PersonResponse personResponse_from_search in personResponses_from_search)
+            {
+                _outputHelper.WriteLine($"PersonID: {personResponse_from_search.PersonID}, Name: {personResponse_from_search.PersonName}, Email: {personResponse_from_search.Email}");
+            }
+
+            #endregion
+
+            // Assert
+            foreach (PersonResponse personResponse_from_add in personResponses_from_add)
+            {
+                if (personResponse_from_add.PersonName != null && personResponse_from_add.PersonName.Contains("ma", StringComparison.OrdinalIgnoreCase))
+                {
+                    Assert.Contains(personResponse_from_add, personResponses_from_search);
+                }
+            }
+        }
+
+        #endregion
+    }
+
+    public class PersonServiceTestHelper
+    {
+        public static List<PersonResponse> AddPersonsToService(ICountryService _countryService, IPersonService _personService)
+        {
+            CountryAddRequest country1 = new CountryAddRequest { CountryName = "India" };
+            CountryAddRequest country2 = new CountryAddRequest { CountryName = "USA" };
+
+            CountryResponse countryResponse1 = _countryService.AddCountry(country1);
+            CountryResponse countryResponse2 = _countryService.AddCountry(country2);
+
+            PersonAddRequest person1 = new PersonAddRequest
+            {
+                PersonName = "Mary",
+                Email = "mary@yahoo.com",
+                CountryID = countryResponse1.CountryID
+            };
+            PersonAddRequest person2 = new PersonAddRequest
+            {
+                PersonName = "Juleus",
+                Email = "juleus@yahoo.com",
+                CountryID = countryResponse1.CountryID
+            };
+            PersonAddRequest person3 = new PersonAddRequest
+            {
+                PersonName = "August",
+                Email = "august@yahoo.com",
+                CountryID = countryResponse1.CountryID
+            };
+
+            List<PersonAddRequest> personAddRequests = new List<PersonAddRequest>()
+            {
+                person1,
+                person2,
+                person3
+            };
+
+            List<PersonResponse> personResponses_from_add = new List<PersonResponse>();
+
+            foreach (PersonAddRequest personAddRequest in personAddRequests)
+            {
+                PersonResponse personResponse = _personService.AddPerson(personAddRequest);
+                personResponses_from_add.Add(personResponse);
+            }
+
+            return personResponses_from_add;
+        }
     }
 }
