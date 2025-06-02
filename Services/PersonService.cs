@@ -82,9 +82,78 @@ namespace Services
             return ConvertPersonToPersonResponse(person);
         }
 
-        public List<PersonResponse> GetFilteredPerons(string searchBy, string? searchString)
+        public List<PersonResponse> GetFilteredPersons(string searchBy, string? searchString)
         {
-            throw new NotImplementedException();
+            // Check if searchBy is not null or empty.
+            // Get all persons from List<Person> and filter them based on searchBy and searchString.
+            // If searchBy is "PersonName", filter by PersonName.
+            // Convert each filtered Person to PersonResponse and return the list.
+            
+            List<PersonResponse> getAllPersons = GetAllPersons();
+            List<PersonResponse> filteredPersons = getAllPersons;
+
+            if (string.IsNullOrWhiteSpace(searchBy) && string.IsNullOrEmpty(searchString))
+                return filteredPersons;
+
+            switch (searchBy)
+            {
+                case nameof(PersonResponse.PersonName):
+                    filteredPersons = getAllPersons
+#pragma warning disable CS8604 // Possible null reference argument.
+                        .Where(p => !string.IsNullOrEmpty(p.PersonName) && p.PersonName.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+                        .ToList();
+                    break;
+
+                case nameof(PersonResponse.Email):
+                    filteredPersons = getAllPersons
+                        .Where(p => !string.IsNullOrEmpty(p.Email) && p.Email.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+                        .ToList();
+                    break;
+
+                case nameof(PersonResponse.DateOfBirth):                                        
+                    if (DateTime.TryParse(searchString, out DateTime dateOfBirth))
+                    {
+                        filteredPersons = getAllPersons
+                            .Where(p => p.DateOfBirth.HasValue && p.DateOfBirth.Value.Date == dateOfBirth.Date)
+                            .ToList();
+                    }
+                    break;
+
+                case nameof(PersonResponse.CountryID):
+                    if (Guid.TryParse(searchString, out Guid countryID))
+                    {
+                        filteredPersons = getAllPersons
+                            .Where(p => p.CountryID.HasValue && p.CountryID.Value == countryID)
+                            .ToList();
+                    }
+                    break;
+
+                case nameof(PersonResponse.Gender):
+                    filteredPersons = getAllPersons
+                        .Where(p => !string.IsNullOrEmpty(p.Gender.ToString()) && p.Gender.ToString().Equals(searchString, StringComparison.OrdinalIgnoreCase))
+                        .ToList();
+                    break;
+
+                case nameof(PersonResponse.Address):
+                    filteredPersons = getAllPersons
+                        .Where(p => !string.IsNullOrEmpty(p.Address) && p.Address.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+                        .ToList();
+                    break;
+
+                case nameof(PersonResponse.ReceiveNewsLetters):
+                    if (bool.TryParse(searchString, out bool receiveNewsLetters))
+                    {
+                        filteredPersons = getAllPersons
+                            .Where(p => p.ReceiveNewsLetters == receiveNewsLetters)
+                            .ToList();
+                    }
+                    break;
+                default:
+                    filteredPersons = getAllPersons;
+                    break;
+            }
+
+            return filteredPersons;
         }
     }
 }

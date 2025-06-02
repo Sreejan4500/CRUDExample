@@ -196,7 +196,7 @@ namespace CRUDTests
             List<PersonResponse> personResponses_from_add = PersonServiceTestHelper.AddPersonsToService(_countryService, _personService);   
 
             // Act
-            List<PersonResponse> personResponses_from_search = _personService.GetFilteredPerons(nameof(Person.PersonName), "");
+            List<PersonResponse> personResponses_from_search = _personService.GetFilteredPersons(nameof(Person.PersonName), "");
 
             #region Print the output for debugging
 
@@ -228,7 +228,7 @@ namespace CRUDTests
             List<PersonResponse> personResponses_from_add = PersonServiceTestHelper.AddPersonsToService(_countryService, _personService);
 
             // Act
-            List<PersonResponse> personResponses_from_search = _personService.GetFilteredPerons(nameof(Person.PersonName), "ma");
+            List<PersonResponse> personResponses_from_search = _personService.GetFilteredPersons(nameof(Person.PersonName), "ma");
 
             #region Print the output for debugging
 
