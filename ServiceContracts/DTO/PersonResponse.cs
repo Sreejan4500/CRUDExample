@@ -37,6 +37,26 @@ namespace ServiceContracts.DTO
         {
             return base.GetHashCode();
         }
+
+        public override string ToString()
+        {
+            return $"PersonResponse: {PersonID}, {PersonName}, {Email}, {DateOfBirth?.ToString("dd MMM yyyy")}, {Gender}, {CountryID}, {CountryName}, {Address}, {ReceiveNewsLetters}, {Age}";
+        }
+
+        public PersonUpdateRequest ToPersonUpdateRequest()
+        {
+            return new PersonUpdateRequest()
+            {
+                PersonID = PersonID,
+                PersonName = PersonName,
+                Email = Email,
+                DateOfBirth = DateOfBirth,
+                Gender = Gender,
+                CountryID = CountryID,
+                Address = Address,
+                ReceiveNewsLetters = ReceiveNewsLetters,
+            };
+        }
     }
 
     public static class PersonResponseExtensions
@@ -48,7 +68,7 @@ namespace ServiceContracts.DTO
                 PersonID = person.PersonID,
                 PersonName = person.PersonName,
                 Email = person.Email,
-                DateOfBirth = person.DateOfBirth ,
+                DateOfBirth = person.DateOfBirth,
                 Gender = Enum.TryParse(person.Gender, out GenderOptions gender) ? gender : GenderOptions.PreferNotToSay,
                 CountryID = person.CountryID,
                 Address = person.Address,
