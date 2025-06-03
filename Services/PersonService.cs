@@ -221,5 +221,17 @@ namespace Services
             }
             return sortedPersons;
         }
+
+        public PersonResponse? UpdatePerson(PersonUpdateRequest? personUpdateRequest)
+        {
+            // Check if personUpdateRequest is not null.
+            // Validate all properties of personUpdateRequest.
+            // Find the person with the given PersonID in List<Person>.
+            // If not found, return null.
+            // If found, update the properties of the person with the values from personUpdateRequest.
+            // Convert the updated person to PersonResponse and return it.
+
+            throw new NotImplementedException();
+        }
     }
 }
