@@ -258,6 +258,30 @@ namespace CRUDTests
         }
 
         #endregion
+
+        #region SortPersons Tests
+
+        [Fact]
+        public void GetSortedPersons_DescOrder()
+
+        {
+            // Arrange            
+            List<PersonResponse> personResponses_from_add = PersonServiceTestHelper.AddPersonsToService(_countryService, _personService);
+            personResponses_from_add = personResponses_from_add.OrderByDescending(p => p.PersonName).ToList(); // Sort by PersonName in descending order
+
+            // Act
+            List<PersonResponse> getAllPersons = _personService.GetAllPersons();
+            List<PersonResponse> personResponses_from_sort = _personService.GetSortedPersons(getAllPersons, nameof(Person.PersonName), SortOrderOptions.DESC);
+
+            
+            // Assert
+            for (int i = 0; i < personResponses_from_add.Count;i++)
+            {
+                Assert.Equal(personResponses_from_add[i].PersonName, personResponses_from_sort[i].PersonName);
+            }
+        }
+
+        #endregion
     }
 
     public class PersonServiceTestHelper
