@@ -231,7 +231,23 @@ namespace Services
             // If found, update the properties of the person with the values from personUpdateRequest.
             // Convert the updated person to PersonResponse and return it.
 
-            throw new NotImplementedException();
+            if (personUpdateRequest == null)
+            {
+                throw new ArgumentNullException(nameof(personUpdateRequest), "Person update request cannot be null.");
+            }
+
+            ValidationHelper.ModelValidation(personUpdateRequest);
+
+            Person? matchingPerson = _persons.FirstOrDefault(p => p.PersonID == personUpdateRequest.PersonID);
+
+            if (matchingPerson == null)
+            {
+                return null;
+            }
+
+            matchingPerson = personUpdateRequest.ToPerson();
+
+            return matchingPerson.ToPersonResponse();
         }
     }
 }
