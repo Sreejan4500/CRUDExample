@@ -249,5 +249,23 @@ namespace Services
 
             return matchingPerson.ToPersonResponse();
         }
+
+        public bool DeletePerson(Guid? personID)
+        {
+            // Check if personID is not null.
+            // Get the matching Person from List<Person> based on the given personID.
+            // If not found, return false.
+            // If found, remove it from List<Person> and return true.
+
+            if (personID == null)
+            {
+                throw new ArgumentNullException(nameof(personID), "Person ID cannot be null.");
+            }
+            Person? matchingPerson = _persons.FirstOrDefault(p => p.PersonID == personID.Value);
+            if (matchingPerson == null) 
+                return false;
+
+            return _persons.Remove(matchingPerson); // Returns true if the person was successfully removed, false otherwise.
+        }
     }
 }

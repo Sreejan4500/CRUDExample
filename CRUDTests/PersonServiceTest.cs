@@ -283,6 +283,7 @@ namespace CRUDTests
 
         #endregion
 
+
         #region UpdatePerson Tests
 
         [Fact]
@@ -364,56 +365,91 @@ namespace CRUDTests
 
             // Assert
             Assert.NotNull(updatedPersonResponse);
-
-            #endregion
-
         }
-        public class PersonServiceTestHelper
+
+        #endregion
+
+        #region DeletePerson Tests
+
+        [Fact]
+        public void DeletePerson_ValidPersonID()
         {
-            public static List<PersonResponse> AddPersonsToService(ICountryService _countryService, IPersonService _personService)
+            // Arrange
+            CountryAddRequest country = new CountryAddRequest { CountryName = "India" };
+            CountryResponse _countryResponse = _countryService.AddCountry(country);
+
+            PersonAddRequest person = new PersonAddRequest
             {
-                CountryAddRequest country1 = new CountryAddRequest { CountryName = "India" };
-                CountryAddRequest country2 = new CountryAddRequest { CountryName = "USA" };
+                PersonName = "Virat",
+                Email = "viratkohli18@gmail.com",
+                CountryID = _countryResponse.CountryID
+            };
 
-                CountryResponse countryResponse1 = _countryService.AddCountry(country1);
-                CountryResponse countryResponse2 = _countryService.AddCountry(country2);
+            PersonResponse personResponse = _personService.AddPerson(person);
 
-                PersonAddRequest person1 = new PersonAddRequest
-                {
-                    PersonName = "Mary",
-                    Email = "mary@yahoo.com",
-                    CountryID = countryResponse1.CountryID
-                };
-                PersonAddRequest person2 = new PersonAddRequest
-                {
-                    PersonName = "Juleus",
-                    Email = "juleus@yahoo.com",
-                    CountryID = countryResponse1.CountryID
-                };
-                PersonAddRequest person3 = new PersonAddRequest
-                {
-                    PersonName = "August",
-                    Email = "august@yahoo.com",
-                    CountryID = countryResponse1.CountryID
-                };
+            // Act & Assert
+            Assert.True(_personService.DeletePerson(personResponse.PersonID));
+        }
 
-                List<PersonAddRequest> personAddRequests = new List<PersonAddRequest>()
+        [Fact]
+        public void DeletePerson_InvalidPersonID()
+        {
+            // Arrange
+            Guid personID = Guid.NewGuid(); // A new Guid, considering it doesn't exist.
+
+            // Act & Assert
+            Assert.False(_personService.DeletePerson(personID));
+        }
+
+        #endregion
+
+    }
+
+    public class PersonServiceTestHelper
+    {
+        public static List<PersonResponse> AddPersonsToService(ICountryService _countryService, IPersonService _personService)
+        {
+            CountryAddRequest country1 = new CountryAddRequest { CountryName = "India" };
+            CountryAddRequest country2 = new CountryAddRequest { CountryName = "USA" };
+
+            CountryResponse countryResponse1 = _countryService.AddCountry(country1);
+            CountryResponse countryResponse2 = _countryService.AddCountry(country2);
+
+            PersonAddRequest person1 = new PersonAddRequest
+            {
+                PersonName = "Mary",
+                Email = "mary@yahoo.com",
+                CountryID = countryResponse1.CountryID
+            };
+            PersonAddRequest person2 = new PersonAddRequest
+            {
+                PersonName = "Juleus",
+                Email = "juleus@yahoo.com",
+                CountryID = countryResponse1.CountryID
+            };
+            PersonAddRequest person3 = new PersonAddRequest
+            {
+                PersonName = "August",
+                Email = "august@yahoo.com",
+                CountryID = countryResponse1.CountryID
+            };
+
+            List<PersonAddRequest> personAddRequests = new List<PersonAddRequest>()
             {
                 person1,
                 person2,
                 person3
             };
 
-                List<PersonResponse> personResponses_from_add = new List<PersonResponse>();
+            List<PersonResponse> personResponses_from_add = new List<PersonResponse>();
 
-                foreach (PersonAddRequest personAddRequest in personAddRequests)
-                {
-                    PersonResponse personResponse = _personService.AddPerson(personAddRequest);
-                    personResponses_from_add.Add(personResponse);
-                }
-
-                return personResponses_from_add;
+            foreach (PersonAddRequest personAddRequest in personAddRequests)
+            {
+                PersonResponse personResponse = _personService.AddPerson(personAddRequest);
+                personResponses_from_add.Add(personResponse);
             }
+
+            return personResponses_from_add;
         }
     }
 }
