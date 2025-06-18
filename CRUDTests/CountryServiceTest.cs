@@ -6,7 +6,7 @@ namespace CRUDTests
 {
     public class CountryServiceTest
     {
-        private readonly ICountryService _countriesService = new CountryService();
+        private readonly ICountryService _countriesService = new CountryService(false);
 
         #region AddCountry Tests
 

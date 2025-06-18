@@ -10,7 +10,7 @@ namespace CRUDTests
     public class PersonServiceTest
     {
         private readonly IPersonService _personService = new PersonService();
-        private readonly ICountryService _countryService = new CountryService();
+        private readonly ICountryService _countryService = new CountryService(false);
         private readonly ITestOutputHelper _outputHelper;
 
         public PersonServiceTest(ITestOutputHelper outputHelper)

@@ -10,6 +10,16 @@ namespace Services
     {
         private readonly List<Country> _countries = new List<Country>();
 
+        public CountryService(bool initializeCountries = true)
+        {
+            if (initializeCountries)
+            {
+                // Initialize with some default countries
+                _countries.Add(new Country { CountryID = Guid.Parse("eeeeeeee-eeee-eeee-eeee-eeeeeeeeeeee"), CountryName = "United States" });
+                _countries.Add(new Country { CountryID = Guid.Parse("dddddddd-dddd-dddd-dddd-dddddddddddd"), CountryName = "Canada" });
+                _countries.Add(new Country { CountryID = Guid.Parse("cccccccc-cccc-cccc-cccc-cccccccccccc"), CountryName = "Mexico" });
+            }
+        }
 
         /// <summary>
         /// Adds a new country to the collection.

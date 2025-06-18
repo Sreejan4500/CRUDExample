@@ -11,6 +11,71 @@ namespace Services
         private readonly List<Person> _persons = new List<Person>();
         private readonly ICountryService _countryService = new CountryService();
 
+        public PersonService(bool initialize = true)
+        {
+            if(!initialize) return;
+
+            // Initialize with some dummy data for testing purposes.
+            _persons = new List<Person>        
+            {
+                new Person
+                {
+                    PersonID = Guid.Parse("11111111-1111-1111-1111-111111111111"),
+                    PersonName = "John Doe",
+                    Email = "john.doe@example.com",
+                    DateOfBirth = new DateTime(1990, 5, 15),
+                    Gender = GenderOptions.Male.ToString(),
+                    CountryID = Guid.Parse("cccccccc-cccc-cccc-cccc-cccccccccccc"),
+                    Address = "123 Main St, Cityville",
+                    ReceiveNewsLetters = true
+                },
+                new Person
+                {
+                    PersonID = Guid.Parse("22222222-2222-2222-2222-222222222222"),
+                    PersonName = "Jane Smith",
+                    Email = "jane.smith@example.com",
+                    DateOfBirth = new DateTime(1985, 8, 23),
+                    Gender = GenderOptions.Female.ToString(),
+                    CountryID = Guid.Parse("cccccccc-cccc-cccc-cccc-cccccccccccc"),
+                    Address = "456 Oak Ave, Townsville",
+                    ReceiveNewsLetters = false
+                },
+                new Person
+                {
+                    PersonID = Guid.Parse("33333333-3333-3333-3333-333333333333"),
+                    PersonName = "Alex Johnson",
+                    Email = "alex.johnson@example.com",
+                    DateOfBirth = new DateTime(1992, 12, 2),
+                    Gender = GenderOptions.Other.ToString(),
+                    CountryID = Guid.Parse("cccccccc-cccc-cccc-cccc-cccccccccccc"),
+                    Address = "789 Pine Rd, Villagetown",
+                    ReceiveNewsLetters = true
+                },
+                new Person
+                {
+                    PersonID = Guid.Parse("44444444-4444-4444-4444-444444444444"),
+                    PersonName = "Sam Lee",
+                    Email = "sam.lee@example.com",
+                    DateOfBirth = new DateTime(1978, 3, 30),
+                    Gender = GenderOptions.Male.ToString(),
+                    CountryID = Guid.Parse("dddddddd-dddd-dddd-dddd-dddddddddddd"),
+                    Address = "321 Maple St, Hamlet",
+                    ReceiveNewsLetters = false
+                },
+                new Person
+                {
+                    PersonID = Guid.Parse("55555555-5555-5555-5555-555555555555"),
+                    PersonName = "Morgan Brown",
+                    Email = "morgan.brown@example.com",
+                    DateOfBirth = new DateTime(1988, 7, 19),
+                    Gender = GenderOptions.PreferNotToSay.ToString(),
+                    CountryID = Guid.Parse("eeeeeeee-eeee-eeee-eeee-eeeeeeeeeeee"),
+                    Address = "654 Cedar Ave, Borough",
+                    ReceiveNewsLetters = true
+                }
+            };
+        }
+
         private PersonResponse ConvertPersonToPersonResponse(Person person)
         {
             PersonResponse personResponse = person.ToPersonResponse();
