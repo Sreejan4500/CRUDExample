@@ -11,9 +11,9 @@ namespace Services
         private readonly List<Person> _persons = new List<Person>();
         private readonly ICountryService _countryService = new CountryService();
 
-        public PersonService(bool initialize = true)
+        public PersonService(bool initializePersons = true)
         {
-            if(!initialize) return;
+            if(!initializePersons) return;
 
             // Initialize with some dummy data for testing purposes.
             _persons = new List<Person>        
