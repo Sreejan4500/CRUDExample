@@ -30,6 +30,10 @@ namespace CRUDExample.Controllers
             };
 
             List<PersonResponse> persons = _personService.GetFilteredPersons(searchBy, searchString);
+
+            ViewBag.CurrentSearchBy = searchBy;
+            ViewBag.CurrentSearchString = searchString;
+
             return View(persons);
         }
     }
