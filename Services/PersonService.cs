@@ -280,6 +280,13 @@ namespace Services
                         sortedPersons = allPersons.OrderByDescending(p => p.Age).ToList();
                     break;
 
+                case nameof(PersonResponse.Gender):
+                    if (sortOrder == SortOrderOptions.ASC)
+                        sortedPersons = allPersons.OrderBy(p => p.Gender).ToList();
+                    else
+                        sortedPersons = allPersons.OrderByDescending(p => p.Gender).ToList();
+                    break;
+
                 default:
                     sortedPersons = allPersons;
                     break;
