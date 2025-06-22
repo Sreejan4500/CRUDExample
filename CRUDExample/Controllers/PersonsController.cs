@@ -8,10 +8,12 @@ namespace CRUDExample.Controllers
     public class PersonsController : Controller
     {
         private readonly IPersonService _personService;
+        private readonly ICountryService _countryService;
 
-        public PersonsController(IPersonService personService)
+        public PersonsController(IPersonService personService, ICountryService countryService)
         {
             _personService = personService ?? throw new ArgumentNullException(nameof(personService), "Person service cannot be null.");
+            _countryService = countryService;
         }
 
         [Route("persons/index")]
@@ -53,5 +55,31 @@ namespace CRUDExample.Controllers
 
             return View(sortedPersons);
         }
+
+        [Route("persons/create")]
+        [HttpGet]
+        public IActionResult Create()
+        {            
+            List<CountryResponse> countries = _countryService.GetAllCountries();
+            ViewBag.Countries = countries;
+            return View();
+        }
+
+        [Route("persons/create")]
+        [HttpPost]
+        public IActionResult Create(PersonAddRequest personAddRequest)
+        {
+            if (ModelState.IsValid)
+            {
+                _personService.AddPerson(personAddRequest);
+                return RedirectToAction("Index");
+            }
+
+            List<CountryResponse> countries = _countryService.GetAllCountries();
+            ViewBag.Countries = countries;
+            ViewBag.Errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
+            return View();
+        }
+
     }
 }
